@@ -75,14 +75,17 @@ public class TestApi {
         Assertions.assertEquals(sortedByCode, sortedResponseIds);
     }
 
+
+
+//заводка нового пользака с помощью аннотаций ломбока плагина pojo и сборка простыни json'a с помощью джексона
     @Test
-    public void addedUserTet(){
+    public void addedUserTest(){
         Name name = new Name("Lexa","Lexus");
         Geolocation geolocation = new Geolocation("-37.3159","81.1496");
         Address address = Address.builder()
                 .city("Moscow")
                 .number(99)
-                .zipcode("73500-1505")
+                .zipcode("53500-1505")
                 .street("Prospekt Mira")
                 .geolocation(geolocation).build();
 
