@@ -51,6 +51,15 @@ public class TestApi {
                 .statusCode(200)
                 .body("", hasSize(limitSize));
     }
+    @Test
+    public void getOnlyUserWithLimitTest(){
+        int limitSize = 4;
+        given().queryParam("limit",limitSize)
+                .get("https://fakestoreapi.com/users")
+                .then().log().all()
+                .statusCode(200)
+                .body("", hasSize(limitSize));
+    }
 //какие то ашипки сыпятся разобраться надокукцк
     @Test
     public void getAllUsersSortDesc(){
