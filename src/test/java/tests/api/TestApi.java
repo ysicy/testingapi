@@ -142,7 +142,7 @@ public class TestApi {
     }
 
     @Test
-    public void updateUsertest(){
+    public void updateUserTest(){
         UserRoot user = getTestuser();
         String oldPassword = user.getPassword();
 
