@@ -1,6 +1,9 @@
 package tests.swagertests;
 
+import assertions.AssertableResponse;
+import assertions.GenericAssertableResponse;
 import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
@@ -15,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static assertions.Conditions.hasMessage;
+import static assertions.Conditions.hasStatuscode;
 import static io.restassured.RestAssured.given;
 
 public class UserTests {
@@ -109,6 +114,40 @@ public class UserTests {
         Assertions.assertNotNull(token);
     }
 
+
+    @Test
+    public void negativeRegisterPasswordTest() {
+
+        int randomNumber = Math.abs(random.nextInt());
+        FullUser user = FullUser.builder()
+                .login("lenyaautotester" + randomNumber)
+                .build();
+
+        Info info = given().contentType(ContentType.JSON)
+                .body(user)
+                .post("/api/signup")
+                .then().statusCode(400)
+                .extract().jsonPath().getObject("info", Info.class);
+
+        new AssertableResponse(given().contentType(ContentType.JSON)
+                .body(user)
+                .post("/api/signup")
+                .then())
+                .should(hasMessage("Missing login or password"))
+                .should(hasStatuscode(400));
+
+        new GenericAssertableResponse<Info>(given().contentType(ContentType.JSON)
+                .body(user)
+                .post("/api/signup")
+                .then(), new TypeRef<Info>() {})
+                .should(hasMessage("Missing login or password"))
+                .should(hasStatuscode(400))
+                .asObject();
+
+        Assertions.assertEquals("Missing login or password", info.getMessage());
+
+
+    }
     @Test
     public void negativeAuthTest() {
         JwtAuthData authData = new JwtAuthData("sdasdasdas3242", "312312dasfsdfas");
